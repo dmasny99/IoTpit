@@ -1,0 +1,10 @@
+Представлена строка beacon в base64 и hex форматах. Описание ее формирования есть в документации по этапам 1-3 реализации кейсового задания.
+QoSPXEJfmZpBSZmaYHsBQwiYEvYKNfX3QQDTlsApOYEOYPUIzYEB3fY=
+42 84 8f 5c 42 5f 99 9a 41 49 99 9a 60 7b 01 43 08 98 12 F6 0a 35 F5 f7 41 00 d3 96 c0 29 39 81 0e 60 f5 08 cd 81 01 dd f6
+QoSPXEJfmZpBSZmaYHsBQwGYEsA=
+42 84 8f 5c 42 5f 99 9a 41 49 99 9a 60 7b 01 43 01 98 12 c0
+QbxR7EILj1xBRmZmYH2WAgOYEoMpOZz3QQA=
+41 bc 51 ec 42 0b 8f 5c 41 46 66 66 60 7D 96 02 03 98 12 83 29 39 9C F7 41 00
+{"x":12,"y":13, "z":-27}
+{"x":50,"y":20, "z":-28}
+{"x":90,"y":7, "z":-27}

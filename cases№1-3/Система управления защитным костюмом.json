@@ -1,0 +1,1010 @@
+{
+  "version": 1,
+  "origin": "sandbox.rightech.io",
+  "time": "2021-04-19T19:29:28.607Z",
+  "user": "60490ec953072efc4bfd2268",
+  "group": "60490ec953072efc4bfd2267",
+  "store": "models",
+  "data": {
+    "_id": "60788d1d402c060010391944",
+    "name": "Система управления защитным костюмом",
+    "base": "mqtt",
+    "description": "финал олимпиады по IoT система 1",
+    "data": {
+      "id": "root",
+      "name": "Система управления защитным костюмом",
+      "active": true,
+      "type": "subsystem",
+      "children": [
+        {
+          "id": "external-software-modules",
+          "active": true,
+          "copy": true,
+          "type": "subsystem",
+          "children": [],
+          "name": "External software modules"
+        },
+        {
+          "id": "server-info",
+          "name": "Серверная информация",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "online",
+              "name": "Онлайн",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "boolean",
+              "reference": "online",
+              "_parentId": "server-info",
+              "expanded": false,
+              "_localId": "xvl6yn11jk7i",
+              "description": "Статус подключения устройства"
+            },
+            {
+              "id": "_ts",
+              "name": "Время",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "unit": "duration-microsecond",
+              "reference": "_ts",
+              "_parentId": "server-info",
+              "expanded": false,
+              "_localId": "h8nhnpd8p9lf",
+              "linear": true,
+              "factor": 1,
+              "description": "Время получения пакета от устройства"
+            }
+          ],
+          "expanded": false,
+          "_localId": "uj2ledxko89c"
+        },
+        {
+          "id": "params",
+          "name": "Параметры",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "mqtt-last",
+              "name": "Последняя публикация MQTT",
+              "active": true,
+              "type": "subsystem",
+              "children": [
+                {
+                  "id": "topic",
+                  "name": "Топик",
+                  "active": true,
+                  "type": "argument",
+                  "source": "state",
+                  "dataType": "string",
+                  "reference": "topic",
+                  "_parentId": "mqtt-last",
+                  "expanded": false,
+                  "_localId": "da4w62ei4ota"
+                },
+                {
+                  "id": "payload",
+                  "name": "Данные",
+                  "active": true,
+                  "type": "argument",
+                  "source": "state",
+                  "dataType": "string",
+                  "reference": "payload",
+                  "_parentId": "mqtt-last",
+                  "expanded": false,
+                  "_localId": "1v32ppyi78mp"
+                }
+              ],
+              "expanded": false,
+              "_localId": "3as3rdgn0o22"
+            }
+          ],
+          "expanded": true,
+          "_localId": "emvm82abeg6s"
+        },
+        {
+          "id": "costume_config",
+          "name": "Конфигурация костюма",
+          "_localId": "adaa5",
+          "active": true,
+          "type": "subsystem",
+          "expanded": false,
+          "children": [
+            {
+              "id": "battery_capacity",
+              "name": "Емкость аккумулятора костюма",
+              "_localId": "dcscm",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "children": [],
+              "source": "config",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "_parentId": "costume_config"
+            },
+            {
+              "id": "power_in_hour",
+              "name": "Мощность в течение часа",
+              "active": true,
+              "type": "argument",
+              "children": [],
+              "expanded": false,
+              "_localId": "utlxoa9qjeee",
+              "source": "config",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "_parentId": "costume_config"
+            }
+          ]
+        },
+        {
+          "id": "costume_params",
+          "name": "Параметры костюма",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "active_state",
+              "name": "Костюм активирован",
+              "active": true,
+              "type": "argument",
+              "dataType": "boolean",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": null,
+              "_parentId": "costume_params",
+              "expanded": false,
+              "_localId": "6hxh1ozncb3q",
+              "description": "Состояние работы костюма (активирован или деактивирован)",
+              "reference": "base/state/active_state"
+            },
+            {
+              "id": "charge",
+              "name": "Уровень заряда",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": "percent",
+              "_parentId": "costume_params",
+              "expanded": false,
+              "_localId": "bo008em91fxu",
+              "description": "Уровень заряда аккумулятора костюма",
+              "reference": "base/state/charge",
+              "_levels": [
+                {
+                  "index": 0,
+                  "value": 0,
+                  "color": "#f16059",
+                  "label": "Min"
+                },
+                {
+                  "index": 1,
+                  "value": 100,
+                  "color": "#a2ce4b",
+                  "label": "Max"
+                }
+              ],
+              "children": [
+                {
+                  "id": "charge.levels.0",
+                  "name": "Min",
+                  "active": true,
+                  "type": "level",
+                  "index": 0,
+                  "value": 0,
+                  "color": "#f16059",
+                  "expanded": false,
+                  "_localId": "ko0tgqy99126"
+                },
+                {
+                  "id": "charge.levels.1",
+                  "name": "Max",
+                  "active": true,
+                  "type": "level",
+                  "index": 1,
+                  "value": 100,
+                  "color": "#a2ce4b",
+                  "expanded": false,
+                  "_localId": "1257g5zued4v"
+                }
+              ],
+              "display": {
+                "svg": null
+              }
+            },
+            {
+              "id": "charge_reserve",
+              "name": "Запас заряда",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": "duration-minute",
+              "children": [
+                {
+                  "id": "charge_reserve.levels.0",
+                  "name": "-Infinity",
+                  "active": true,
+                  "type": "level",
+                  "index": 0,
+                  "value": "-Infinity",
+                  "color": "#f16059"
+                },
+                {
+                  "id": "charge_reserve.levels.1",
+                  "name": "Min",
+                  "active": true,
+                  "type": "level",
+                  "index": 1,
+                  "value": 0,
+                  "color": "#f16059"
+                },
+                {
+                  "id": "charge_reserve.levels.2",
+                  "name": "Mid",
+                  "active": true,
+                  "type": "level",
+                  "index": 5,
+                  "value": 150,
+                  "color": "#ffae62"
+                },
+                {
+                  "id": "charge_reserve.levels.3",
+                  "name": "Max",
+                  "active": true,
+                  "type": "level",
+                  "index": 9,
+                  "value": 300,
+                  "color": "#a2ce4b"
+                }
+              ]
+            }
+          ],
+          "expanded": false,
+          "_localId": "7li4et1on5te"
+        },
+        {
+          "id": "coords_sys",
+          "name": "Координаты",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "coords",
+              "name": "Координаты JSON",
+              "active": true,
+              "type": "argument",
+              "dataType": "object",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": null,
+              "children": [
+                {
+                  "id": "x",
+                  "name": "X",
+                  "active": true,
+                  "type": "argument",
+                  "dataType": "number",
+                  "factor": 1,
+                  "linear": true,
+                  "reference": "coords.x",
+                  "source": "state",
+                  "unit": "length-meter",
+                  "_parentId": "coords",
+                  "expanded": false,
+                  "_localId": "bo2kxnznbjso",
+                  "description": "Координата X"
+                },
+                {
+                  "id": "y",
+                  "name": "Y",
+                  "active": true,
+                  "type": "argument",
+                  "dataType": "number",
+                  "factor": 1,
+                  "linear": true,
+                  "reference": "coords.y",
+                  "source": "state",
+                  "unit": "length-meter",
+                  "_parentId": "coords",
+                  "expanded": false,
+                  "_localId": "vfyozph79qg8",
+                  "description": "Координата Y"
+                },
+                {
+                  "id": "z",
+                  "name": "Z",
+                  "active": true,
+                  "type": "argument",
+                  "dataType": "number",
+                  "factor": 1,
+                  "linear": true,
+                  "reference": "coords.z",
+                  "source": "state",
+                  "unit": "length-meter",
+                  "_parentId": "coords",
+                  "expanded": false,
+                  "_localId": "nmwvb5g44f46",
+                  "description": "Координата Z"
+                }
+              ],
+              "_parentId": "coords_sys",
+              "expanded": true,
+              "_localId": "so028w80p1qu",
+              "reference": "base/state/coords"
+            }
+          ],
+          "expanded": false,
+          "_localId": "rfwyrvpfhomw"
+        },
+        {
+          "id": "distance_to_beacons",
+          "name": "Расстояние до маяков",
+          "_localId": "ok3uh",
+          "active": true,
+          "type": "subsystem",
+          "expanded": true,
+          "children": [
+            {
+              "id": "dist_98_12",
+              "name": "98:12",
+              "_localId": "dt9bp",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка 98:12",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons"
+            },
+            {
+              "id": "dist_0a_35",
+              "name": "0a:35",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка 0a:35",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "ay84xll8luzk"
+            },
+            {
+              "id": "dist_29_39",
+              "name": "29:39",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка 29:39",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "xgz8z610yf0g"
+            },
+            {
+              "id": "dist_d3_96",
+              "name": "d3:96",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка d3:96",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "bg1bbeop86st"
+            },
+            {
+              "id": "dist_f7_41",
+              "name": "f7:41",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка f7:41",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "qlwvvspxw59x"
+            },
+            {
+              "id": "dist_01_dd",
+              "name": "01:dd",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка 01:dd",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "o9dg5o2wfrj3"
+            },
+            {
+              "id": "dist_08_cd",
+              "name": "08:cd",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка 08:cd",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "03kav9n4q93k"
+            },
+            {
+              "id": "dist_0e_60",
+              "name": "0e:60",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Рассчитанное расстояние до маяка 0e:60",
+              "unit": "length-meter",
+              "_parentId": "distance_to_beacons",
+              "children": [],
+              "expanded": false,
+              "_localId": "xjf6mf43a4i9"
+            }
+          ]
+        },
+        {
+          "id": "env",
+          "name": "Окружающая среда",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "humidity",
+              "name": "Влажность",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "_localId": "41k6gbh4yzda",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Уровень влажности окружающего пространства.",
+              "unit": "percent",
+              "_parentId": "env",
+              "reference": "base/state/humidity"
+            },
+            {
+              "id": "oxygen",
+              "name": "Кислород",
+              "_localId": "buq6t",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Содержание кислорода в воздухе",
+              "unit": "percent",
+              "_parentId": "env",
+              "reference": "base/state/oxygen"
+            },
+            {
+              "id": "carbon",
+              "name": "Углекислый газ",
+              "_localId": "z52l4",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Содержание диоксида углерода (углекислого газа) в рудничном воздухе",
+              "unit": "percent",
+              "_parentId": "env",
+              "reference": "base/state/carbon"
+            },
+            {
+              "id": "nitric",
+              "name": "Оксид озота",
+              "_localId": "vosl5",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "unit": "percent",
+              "_parentId": "env",
+              "description": "Концентрация оксида азота в окружающем пространстве",
+              "reference": "base/state/nitric"
+            },
+            {
+              "id": "sulfurous",
+              "name": "Сернистый газ",
+              "_localId": "g4wow",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 100000,
+              "unit": "percent",
+              "_parentId": "env",
+              "description": "Концентрация сернистого ангидрида в окружающем пространстве. Множитель 100000, сделал это для корректного отображения чисел в состоянии объекта (не отображает слишком маленькие числа), поскольку максимальное допустимое значение составляет 0.00038 %. Так же при реализации автомата 3 я учитываю этот факт и ставлю макимально допустимое значени 38%, потому что я подразумеваю, что исходная десятичная дробь уже умножена на заданный мной множитель.",
+              "reference": "base/state/sulfurous"
+            },
+            {
+              "id": "hydrogen_sulfide",
+              "name": "Сероводород",
+              "_localId": "a7zer",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 100000,
+              "unit": "percent",
+              "_parentId": "env",
+              "description": "Концентрация сероводорода в окружающем пространстве.Множитель 100000, сделал это для корректного отображения чисел в состоянии объекта (не отображает слишком маленькие числа), поскольку максимальное допустимое значение составляет 0.00070 %. Так же при реализации автомата 3 я учитываю этот факт и ставлю макимально допустимое значени 70%, потому что я подразумеваю, что исходная десятичная дробь уже умножена на заданный мной множитель.",
+              "reference": "base/state/hydrogen_sulfide"
+            },
+            {
+              "id": "methane",
+              "name": "Метан",
+              "_localId": "d7v8t",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "unit": "percent",
+              "_parentId": "env",
+              "description": "Концентрация метана в окружающем пространстве",
+              "reference": "base/state/methane"
+            },
+            {
+              "id": "dust",
+              "name": "Угольная пыль",
+              "_localId": "e3ei6",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "unit": "percent",
+              "_parentId": "env",
+              "description": "Концентрация угольной пыли в окружающем пространстве",
+              "reference": "base/state/dust"
+            }
+          ],
+          "expanded": true,
+          "_localId": "ugmw65i69wg4"
+        },
+        {
+          "id": "beacon_sub_sys",
+          "name": "Beacon",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "beacons",
+              "name": "Данные от Beacon",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "string",
+              "linear": true,
+              "factor": 1,
+              "description": "Пакет данных в формате Base64, который впоследствии нужно разобрать с помощью обработчика на отдельные параметры",
+              "unit": null,
+              "_parentId": "beacon_sub_sys",
+              "children": [],
+              "expanded": false,
+              "_localId": "mlrqgltl6ejz",
+              "reference": "base/state/beacons"
+            },
+            {
+              "id": "lat",
+              "name": "Широта",
+              "active": true,
+              "type": "argument",
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Широта по данным GPS",
+              "unit": "angle-degree",
+              "_parentId": "beacon_sub_sys",
+              "children": [],
+              "expanded": false,
+              "_localId": "avud16e5nmnn",
+              "reference": "base/state/lat"
+            },
+            {
+              "id": "lon",
+              "name": "Долгота",
+              "active": true,
+              "type": "argument",
+              "children": [],
+              "dataType": "number",
+              "description": "Долгота по данным GPS",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": "angle-degree",
+              "_parentId": "beacon_sub_sys",
+              "expanded": false,
+              "_localId": "geh49g35c7df",
+              "reference": "base/state/lon"
+            },
+            {
+              "id": "alt",
+              "name": "Высота ",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "description": "Высота по данным GPS",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": "length-meter",
+              "_parentId": "beacon_sub_sys",
+              "expanded": false,
+              "_localId": "x58jq2k6wicy",
+              "reference": "base/state/alt"
+            },
+            {
+              "id": "ev_time",
+              "name": "Время события",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "unit": "duration-millisecond",
+              "_parentId": "beacon_sub_sys",
+              "expanded": false,
+              "_localId": "lsrv1vubxo3h"
+            },
+            {
+              "id": "visible_count",
+              "name": "Количество видимых устройств",
+              "_localId": "jpzxe",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Количество видимых Beacon маяков",
+              "_parentId": "beacon_sub_sys"
+            },
+            {
+              "id": "mac_98_12",
+              "name": "RSSI 98:12",
+              "_localId": "w8q5w",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "_parentId": "beacon_sub_sys"
+            },
+            {
+              "id": "mac_0a_35",
+              "name": "RSSI 0a:35",
+              "_localId": "v6h3k",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "source": "state",
+              "dataType": "number",
+              "linear": true,
+              "factor": 1,
+              "description": "Сигнал RSSI от маяка 0a:35",
+              "_parentId": "beacon_sub_sys"
+            },
+            {
+              "id": "mac_29_39",
+              "name": "RSSI 29:39",
+              "_localId": "k9nvf",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "description": "Сигнал RSSI от маяка 29:39"
+            },
+            {
+              "id": "mac_d3_96",
+              "name": "RSSI d3:96",
+              "_localId": "4migi",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "dataType": "number",
+              "description": "Сигнал RSSI от маяка d3:96",
+              "factor": 1,
+              "linear": true,
+              "source": "state"
+            },
+            {
+              "id": "mac_f7_41",
+              "name": "RSSI f7:41",
+              "_localId": "pqbpf",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "dataType": "number",
+              "description": "Сигнал RSSI от маяка f7:41",
+              "factor": 1,
+              "linear": true,
+              "source": "state"
+            },
+            {
+              "id": "mac_01_dd",
+              "name": "RSSI 01:dd",
+              "_localId": "r2a62",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "dataType": "number",
+              "description": "Сигнал RSSI от маяка 01:dd",
+              "factor": 1,
+              "linear": true,
+              "source": "state"
+            },
+            {
+              "id": "mac_08_cd",
+              "name": "RSSI 08:cd",
+              "_localId": "az3e0",
+              "active": true,
+              "type": "argument",
+              "expanded": false,
+              "dataType": "number",
+              "description": "Сигнал RSSI от маяка 08:cd",
+              "factor": 1,
+              "linear": true,
+              "source": "state"
+            },
+            {
+              "id": "mac_0e_60",
+              "name": "RSSI 0e:60",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "description": "Сигнал RSSI от маяка 0e:60",
+              "factor": 1,
+              "linear": true,
+              "source": "state"
+            }
+          ],
+          "expanded": false,
+          "_localId": "dp9lg2j11sib"
+        },
+        {
+          "id": "cmds",
+          "name": "Commands",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "costume_on",
+              "name": "Активировать костюм",
+              "active": true,
+              "type": "action",
+              "command": "publish",
+              "params": {
+                "payload": "1",
+                "topic": "base/state/costume_on"
+              },
+              "service": "ric-gate",
+              "children": []
+            },
+            {
+              "id": "costume_off",
+              "name": "Деактивировать костюм",
+              "active": true,
+              "type": "action",
+              "service": "ric-gate",
+              "command": "publish",
+              "params": {
+                "topic": "base/state/costume_on",
+                "payload": "0"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "zones_events",
+          "name": "События",
+          "active": true,
+          "type": "subsystem",
+          "description": "События для автоматов контроля входа и выхода в различные геозоны.",
+          "children": [
+            {
+              "id": "in_seism",
+              "name": "Вход в зону сейсмоактивности",
+              "active": true,
+              "type": "event-logic"
+            },
+            {
+              "id": "out_seism",
+              "name": "Выход из зоны сейсмоактивности",
+              "active": true,
+              "type": "event-logic",
+              "children": []
+            },
+            {
+              "id": "in_plasts",
+              "name": "Вход в зону движения пластов",
+              "active": true,
+              "type": "event-logic",
+              "children": []
+            },
+            {
+              "id": "out_plasts",
+              "name": "Выход из зоны движения пластов",
+              "active": true,
+              "type": "event-logic",
+              "children": []
+            },
+            {
+              "id": "in_cracks",
+              "name": "Вход в зону трещин",
+              "active": true,
+              "type": "event-logic",
+              "children": []
+            },
+            {
+              "id": "out_cracks",
+              "name": "Выход из зоны трещин",
+              "active": true,
+              "type": "event-logic",
+              "children": []
+            },
+            {
+              "id": "in_work_zone",
+              "name": "Вход в зону работ",
+              "active": true,
+              "type": "event-logic"
+            },
+            {
+              "id": "out_work_zone",
+              "name": "Выход из зоны работ",
+              "active": true,
+              "type": "event-logic",
+              "children": []
+            }
+          ]
+        }
+      ],
+      "_isRoot": true,
+      "description": "финал олимпиады по IoT система 1"
+    },
+    "props": {
+      "bots": true,
+      "hardwareEvents": false,
+      "helper": {
+        "nostate": "@ric-docs/docs/helpers/mqtt.md"
+      },
+      "prefix": "",
+      "order": 1,
+      "typeInput": {
+        "hidden": false
+      },
+      "statusInput": {
+        "hidden": false
+      },
+      "descriptionInput": {
+        "hidden": false
+      },
+      "defaultNode": "temperature",
+      "protocol": "mqtt",
+      "idPattern": "mqtt-$tagname-$nanoid",
+      "namePattern": "mqtt-$tagname-$nanoid",
+      "idInput": {
+        "label": "ClientId"
+      },
+      "auth": {
+        "title": "mqtt_auth",
+        "fields": {
+          "username": {
+            "title": "mqtt_username"
+          },
+          "password": {
+            "secret": true,
+            "title": "mqtt_password"
+          }
+        }
+      },
+      "x509": {
+        "enabled": true
+      },
+      "parserParams": {
+        "saveBinaryAs": {
+          "ctrl": "Select",
+          "opts": {
+            "options": [
+              {
+                "value": "",
+                "label": "Text"
+              },
+              {
+                "value": "base64",
+                "label": "Base64"
+              },
+              {
+                "value": "hex",
+                "label": "HEX"
+              }
+            ]
+          },
+          "defaultValue": "",
+          "when": {
+            "==": [
+              {
+                "var": "node.dataType"
+              },
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
