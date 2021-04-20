@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "origin": "sandbox.rightech.io",
+  "time": "2021-04-20T17:34:02.132Z",
+  "user": "60490ec953072efc4bfd2268",
+  "group": "60490ec953072efc4bfd2267",
+  "store": "models",
+  "data": {
+    "_id": "607ddb5ef03e460011b2edac",
+    "name": "Система мониторинга здоровья",
+    "base": "mqtt",
+    "description": "Система мониторинга здоровья - творческое задание кейс №4.",
+    "data": {
+      "id": "root",
+      "name": "Система мониторинга здоровья",
+      "active": true,
+      "type": "subsystem",
+      "children": [
+        {
+          "id": "external-software-modules",
+          "active": true,
+          "copy": true,
+          "type": "subsystem",
+          "children": [],
+          "name": "External software modules"
+        },
+        {
+          "id": "params",
+          "name": "Params",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "server-info",
+              "name": "Server information",
+              "active": true,
+              "type": "subsystem",
+              "children": [
+                {
+                  "id": "online",
+                  "name": "Online",
+                  "active": true,
+                  "type": "argument",
+                  "source": "state",
+                  "dataType": "boolean",
+                  "reference": "online",
+                  "_parentId": "server-info"
+                },
+                {
+                  "id": "_ts",
+                  "name": "Time",
+                  "active": true,
+                  "type": "argument",
+                  "source": "state",
+                  "dataType": "number",
+                  "unit": "duration-microsecond",
+                  "reference": "_ts",
+                  "_parentId": "server-info"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cmds",
+          "name": "Commands",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "visit_doctor",
+              "name": "Посетить врача",
+              "active": true,
+              "type": "action",
+              "service": "ric-gate",
+              "command": "publish",
+              "params": {
+                "topic": "health/state/visit_doctor",
+                "payload": "Посетите врача"
+              },
+              "description": null
+            }
+          ]
+        },
+        {
+          "id": "health_params",
+          "name": "Показатели физического состояния рабочего",
+          "active": true,
+          "type": "subsystem",
+          "children": [
+            {
+              "id": "pulse",
+              "name": "Пульс",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "reference": "health/pulse"
+            },
+            {
+              "id": "blood_pressure",
+              "name": "Давление",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "reference": "health/blood_preassure"
+            },
+            {
+              "id": "saturation",
+              "name": "Сатурация",
+              "active": true,
+              "type": "argument",
+              "dataType": "number",
+              "factor": 1,
+              "linear": true,
+              "source": "state",
+              "reference": "health/saturation"
+            }
+          ]
+        }
+      ],
+      "_isRoot": true,
+      "description": "Система мониторинга здоровья - творческое задание кейс №4."
+    },
+    "props": {
+      "bots": true,
+      "hardwareEvents": false,
+      "helper": {
+        "nostate": "@ric-docs/docs/helpers/mqtt.md"
+      },
+      "prefix": "",
+      "order": 1,
+      "typeInput": {
+        "hidden": false
+      },
+      "statusInput": {
+        "hidden": false
+      },
+      "descriptionInput": {
+        "hidden": false
+      },
+      "defaultNode": "temperature",
+      "protocol": "mqtt",
+      "idPattern": "mqtt-$tagname-$nanoid",
+      "namePattern": "mqtt-$tagname-$nanoid",
+      "idInput": {
+        "label": "ClientId"
+      },
+      "auth": {
+        "title": "mqtt_auth",
+        "fields": {
+          "username": {
+            "title": "mqtt_username"
+          },
+          "password": {
+            "secret": true,
+            "title": "mqtt_password"
+          }
+        }
+      },
+      "x509": {
+        "enabled": true
+      },
+      "parserParams": {
+        "saveBinaryAs": {
+          "ctrl": "Select",
+          "opts": {
+            "options": [
+              {
+                "value": "",
+                "label": "Text"
+              },
+              {
+                "value": "base64",
+                "label": "Base64"
+              },
+              {
+                "value": "hex",
+                "label": "HEX"
+              }
+            ]
+          },
+          "defaultValue": "",
+          "when": {
+            "==": [
+              {
+                "var": "node.dataType"
+              },
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
