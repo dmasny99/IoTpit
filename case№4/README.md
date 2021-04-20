@@ -4,3 +4,4 @@
 2) Запускается файл backend.py
 3) Запускается файл bot.py
 4) Используется бот
+[Видео](https://www.youtube.com/watch?v=RUYQomA0iLA) работы чат-бота
