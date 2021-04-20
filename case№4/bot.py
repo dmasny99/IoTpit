@@ -1,11 +1,14 @@
 import telebot
+from telebot.types import InputMediaPhoto
 from telebot import types
 import requests
 import time
+import datetime
 import matplotlib
 matplotlib.use('Agg')
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as md
 import sqlite3
 
 
@@ -25,6 +28,48 @@ def startup_menu(message):
     keyboard.row('/get_stat','Отправить сообщение')
     bot.send_message(message.from_user.id,"Выберите действие",reply_markup=keyboard)
 
+def plotter(data,time,name):
+    ax = plt.subplots()
+    plt.subplots_adjust(bottom=0.2)
+    plt.xticks( rotation=25 )
+    ax=plt.gca()
+    xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
+    ax.xaxis.set_major_formatter(xfmt)
+    ax.grid()
+    if name == "pulse":
+        color = 'green'
+        title = "График изменения пульса"
+        ylab = "Пульс"
+        min_allowed = 50
+        max_allowed = 200
+        del_max = 10
+        del_min = 10
+    elif name == "blood_pressure":
+        color = 'purple'
+        title = "График изменения давления"
+        ylab = "Давление"
+        min_allowed = 90
+        max_allowed = 160
+        del_max = 10
+        del_min = 10
+    else:
+        color = 'blue'
+        title = "График изменения сатурации"
+        ylab = "Сатурация"
+        min_allowed = 75
+        max_allowed = 100
+        del_max = 10
+        del_min = 10
+    ax.hlines(max_allowed,time[0],time[-1],color = 'red')
+    ax.hlines(min_allowed,time[0],time[-1],color = 'red')
+    ax.set_title(title)
+    plt.plot(time,data,color = color)
+    plt.xlim([time[0],time[-1]])
+    plt.ylim([min_allowed-del_min,max_allowed+del_max])
+    plt.xlabel("Время")
+    plt.ylabel(ylab)
+    plt.savefig('{}.png'.format(name))
+
 @bot.message_handler(commands=['get_stat'])
 def stat_gatherer(message):
     conn = sqlite3.connect('health_data.db')
@@ -32,19 +77,20 @@ def stat_gatherer(message):
     cur.execute("SELECT * FROM health_monitor;")
     data = cur.fetchall()
     health_stat_array = np.array(data)
-    pulse = np.asarray(health_stat_array[:,1]).reshape(-1,1)
-    plt.plot(pulse)
-    plt.savefig("pulse.png")
-    blood_pressure = np.array(health_stat_array[:,2]).reshape(-1,1)
-    print(blood_pressure)
-    plt.plot(blood_pressure)
-    plt.savefig("blood_pressure.png")
-    saturation = np.array(health_stat_array[:,3]).reshape(-1,1)
-    plt.plot(saturation)
-    plt.savefig("saturation.png")
-    bot.send_photo(message.from_user.id,photo=open("pulse.png","rb"))
-    bot.send_photo(message.from_user.id,photo=open("blood_pressure.png","rb"))
-    bot.send_photo(message.from_user.id,photo=open("saturation.png","rb"))
+    health_stat_array = np.delete(health_stat_array,[0,1], axis = 0)
+    pulse = np.asarray(health_stat_array[:,1])
+    blood_pressure = np.array(health_stat_array[:,2])
+    saturation = np.array(health_stat_array[:,3])
+    dates=[datetime.datetime.fromtimestamp(ts) for ts in np.asarray(health_stat_array[:,4])]
+    plotter(pulse,dates,"pulse")
+    plotter(blood_pressure,dates,"blood_pressure")
+    plotter(saturation,dates,"saturation")
+    bot.send_media_group(message.from_user.id,[InputMediaPhoto(open("pulse.png","rb"),caption="Время отчета: {}".format(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))),
+                                          InputMediaPhoto(open("blood_pressure.png","rb")),
+                                          InputMediaPhoto(open("saturation.png","rb"))])
+    
+
+    #bot.send_photo(message.from_user.id,photo=open("saturation.png","rb"))
 
 bot.polling(none_stop=True, interval=0)
     
