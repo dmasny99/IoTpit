@@ -22,7 +22,6 @@ def requester(id,begin,end):
     response = requests.get(make_url(id,begin,end),headers = headers)
     return response.json()
 
-test = [{'_id': '607de6d833a13710001228b0', '_mid': '607ddb5ef03e460011b2edac', '_oid': '607de42bf03e460011b2ee2c', 'id': 'mqtt-iprofi_254187039-z6m7gb', '_ts': 1618863832684149, 'pulse': 62.242076486536,'blood_pressure': 130.3409483135, '_bot': True, 'online': True, 'time': 1618863832684, 'payload': '99.85637799691858', 'topic': 'health/saturation', '_gid': '60490ec953072efc4bfd2267', 'saturation': 99.856377996919}, {'_id': '607de6de33a13710001229df', '_mid': '607ddb5ef03e460011b2edac', '_oid': '607de42bf03e460011b2ee2c', 'id': 'mqtt-iprofi_254187039-z6m7gb', '_ts': 1618863838192791, 'pulse': 93.758714958794, 'blood_pressure': 130.3409483135, 'saturation': 99.856377996919, 'online': True, 'time': 1618863838192, '_bot': True, 'topic': 'health/pulse', '_gid': '60490ec953072efc4bfd2267', 'payload': '93.75871495879426'}]  
 def json_parser_and_db_commiter(data):
     try:
         for i in range(len(data)):
@@ -35,11 +34,10 @@ def json_parser_and_db_commiter(data):
             conn.commit()
     except KeyError:
         print("Can't find a key. Data won't be commited to the db.")
-begin = round(time.time()*1000)-5000
-json_parser_and_db_commiter(test)
 
+begin = round(time.time()*1000)-5000
 while True:
     end = begin + 10000
     json_parser_and_db_commiter(requester(object_id,begin,end))
     begin = end
-    time.sleep(20)
+    time.sleep(10)

@@ -11,25 +11,17 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import sqlite3
 
-
-
-
-url = "https://sandbox.rightech.io/api/v1/objects/607d8d0ef03e460011b2e258/packets?begin=1618840870138&end=1618840910139"
+object_id = "607de42bf03e460011b2ee2c"
 token_RIC = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MDdkMzIwYWYwM2U0NjAwMTFiMmRhNWUiLCJzdWIiOiI2MDQ5MGVjOTUzMDcyZWZjNGJmZDIyNjgiLCJncnAiOiI2MDQ5MGVjOTUzMDcyZWZjNGJmZDIyNjciLCJsaWMiOmZhbHNlLCJ1c2ciOiJhcGkiLCJmdWxsIjpmYWxzZSwicmlnaHRzIjoxLjUsImlhdCI6MTYxODgxNzU0NiwiZXhwIjoxNjIxMzcxNjAwfQ.MN77XEwaN7wrzkE0ZrYL-0LbsBqaQjMHpzYhxHVdUaY"
 bot = telebot.TeleBot("1600352952:AAHLJS-qXvIs6-PmE-e1G8E7zZcTdSj_jlI")
 
-@bot.message_handler(commands=['help'])
-def get_text_messages(message):
-        bot.send_message(message.from_user.id, "Я бот управления системой мониторинга здоровья.\nЯ умею строить графики физического состояния рабочего.\nНапишите мне /start" )
-
-@bot.message_handler(commands=['start'])
-def startup_menu(message):
-    keyboard = types.ReplyKeyboardMarkup(True)
-    keyboard.row('/get_stat','Отправить сообщение')
-    bot.send_message(message.from_user.id,"Выберите действие",reply_markup=keyboard)
-
+def poster(object_id):
+    headers = {'Content-type': 'application/json', 'Authorization': 'Bearer {}'.format(token_RIC)}
+    url = "https://sandbox.rightech.io/api/v1/objects/{}/commands/visit_doctor".format(object_id)
+    response = requests.post(url,params={"topic": "health/state/visit_doctor", "payload": "Посетите врача"},headers=headers)
+    return response.text
 def plotter(data,time,name):
-    ax = plt.subplots()
+    fig, ax = plt.subplots()
     plt.subplots_adjust(bottom=0.2)
     plt.xticks( rotation=25 )
     ax=plt.gca()
@@ -69,15 +61,25 @@ def plotter(data,time,name):
     plt.xlabel("Время")
     plt.ylabel(ylab)
     plt.savefig('{}.png'.format(name))
+    plt.close(fig)
 
-@bot.message_handler(commands=['get_stat'])
+@bot.message_handler(commands=['help'])
+def get_text_messages(message):
+        bot.send_message(message.from_user.id, "Я бот управления системой мониторинга здоровья.\nЯ умею строить графики физического состояния рабочего.\nНапишите мне /start" )
+
+@bot.message_handler(commands=['start'])
+def startup_menu(message):
+    keyboard = types.ReplyKeyboardMarkup(True)
+    keyboard.row('Получить данные','Срочно посетить врача')
+    bot.send_message(message.from_user.id,"Выберите действие",reply_markup=keyboard)
+
 def stat_gatherer(message):
     conn = sqlite3.connect('health_data.db')
     cur = conn.cursor()
     cur.execute("SELECT * FROM health_monitor;")
     data = cur.fetchall()
     health_stat_array = np.array(data)
-    health_stat_array = np.delete(health_stat_array,[0,1], axis = 0)
+    health_stat_array = np.delete(health_stat_array,[0,1], axis = 0) # удаляю первые две строчки вне указанного временноего диапазона, они почему-то фантомно появлялись всегда
     pulse = np.asarray(health_stat_array[:,1])
     blood_pressure = np.array(health_stat_array[:,2])
     saturation = np.array(health_stat_array[:,3])
@@ -88,9 +90,13 @@ def stat_gatherer(message):
     bot.send_media_group(message.from_user.id,[InputMediaPhoto(open("pulse.png","rb"),caption="Время отчета: {}".format(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))),
                                           InputMediaPhoto(open("blood_pressure.png","rb")),
                                           InputMediaPhoto(open("saturation.png","rb"))])
-    
-
-    #bot.send_photo(message.from_user.id,photo=open("saturation.png","rb"))
-
+@bot.message_handler(content_types=['text'])
+def message_recieved(message):
+    if message.text == "Получить данные":
+        stat_gatherer(message)
+    elif message.text == "Срочно посетить врача":
+       bot.send_message(message.from_user.id,poster(object_id))
+    else:
+        bot.send_message(message.from_user.id,"Я Вас не понимаю")
 bot.polling(none_stop=True, interval=0)
     
